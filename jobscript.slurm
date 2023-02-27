@@ -21,10 +21,10 @@ __conda_setup="$('/data/leuven/344/vsc34493/miniconda/bin/conda' 'shell.bash' 'h
 if [ $? -eq 0 ]; then
     eval "$__conda_setup"
 else
-    if [ -f "/data/leuven/344/vsc34493/miniconda/etc/profile.d/conda.sh" ]; then
-        . "/data/leuven/344/vsc34493/miniconda/etc/profile.d/conda.sh"
+    if [ -f "$VSC_DATA/miniconda/etc/profile.d/conda.sh" ]; then
+        . "$VSC_DATA/miniconda/etc/profile.d/conda.sh"
     else
-        export PATH="/data/leuven/344/vsc34493/miniconda/bin:$PATH"
+        export PATH="$VSC_DATA/miniconda/bin:$PATH"
     fi
 fi
 unset __conda_setup
