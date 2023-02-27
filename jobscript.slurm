@@ -15,6 +15,20 @@
 # Copy the data to the local scratch
 # cp -r $VSC_DATA/projects/vsc_setup $TMPDIR
 
+# >>> conda initialize >>> # This is the conda intialisation that is added by default by conda.
+# !! Contents within this block are managed by 'conda init' !!
+__conda_setup="$('/data/leuven/344/vsc34493/miniconda/bin/conda' 'shell.bash' 'hook' 2> /dev/null)"
+if [ $? -eq 0 ]; then
+    eval "$__conda_setup"
+else
+    if [ -f "/data/leuven/344/vsc34493/miniconda/etc/profile.d/conda.sh" ]; then
+        . "/data/leuven/344/vsc34493/miniconda/etc/profile.d/conda.sh"
+    else
+        export PATH="/data/leuven/344/vsc34493/miniconda/bin:$PATH"
+    fi
+fi
+unset __conda_setup
+# <<< conda initialize <<<
 
 # Activate the conda environment
 export PATH="/data/leuven/344/vsc34493/miniconda/bin:$PATH" #Location of the python libraries you have installed using conda
