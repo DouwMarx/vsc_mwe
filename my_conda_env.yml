@@ -1,0 +1,13 @@
+name: my_conda_env
+dependencies:
+  - numpy
+  - pandas
+
+# To create this environment
+# conda env create -f my_conda_env.yml
+
+# To update this environment
+# conda env update -f my_conda_env.yml
+
+# To activate this environment
+# conda activate my_conda_env
