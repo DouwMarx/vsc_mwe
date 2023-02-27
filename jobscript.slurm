@@ -17,10 +17,10 @@
 
 
 # Activate the conda environment
-conda activate vsc_setup
+export PATH="/data/leuven/344/vsc34493/miniconda/bin:$PATH" #Location of the python libraries you have installed using conda
+conda activate vsc_mwe
 
 # Run the python script
 python example_script.py
-
 
 
