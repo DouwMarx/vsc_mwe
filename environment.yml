@@ -1,4 +1,4 @@
-name: vsc_setup 
+name: vsc_mwe 
 dependencies:
   - numpy
 
