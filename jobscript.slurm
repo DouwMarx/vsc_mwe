@@ -1,5 +1,6 @@
 #! /bin/bash
 #
+#SBATCH --cluster=wice # The compute cluster to use. Genius will do the trick for most things.
 #SBATCH --account=lleuven_phm # Account to charge (Provided you have access). Use resources responsibly.
 #SBATCH --job-name=vsc_mwe  # Name will appear together with job id. Don't use spaces.
 #SBATCH --ntasks=1 # Asks srun to allocate resources for ntasks tasks. Works together with --cpus-per-task.
