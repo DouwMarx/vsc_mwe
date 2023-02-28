@@ -8,13 +8,13 @@
 #SBATCH --time=00:05:00 # Time expected from run hrs:min:sec . Set as small as possible.
 
 # Load required modules
-# module --force purge # First purge all modules
+ module --force purge # First purge all modules
 # module load some_module
 
+# Copy data you need to scratch drive, bearing in mind that it will be deleted at some point.
+cp -r /lustre1/project/stg_00078/IMS $VSC_SCRATCH
 
-# Copy the data to the local scratch
-# cp -r $VSC_DATA/projects/vsc_setup $TMPDIR
-
+# Tell conda where to find the python libraries you have installed conda in a conda environment and activate the environment
 # >>> conda initialize >>> # This is the conda intialisation that is added by default by conda.
 # !! Contents within this block are managed by 'conda init' !!
 __conda_setup="$('/data/leuven/344/vsc34493/miniconda/bin/conda' 'shell.bash' 'hook' 2> /dev/null)"
@@ -30,9 +30,7 @@ fi
 unset __conda_setup
 # <<< conda initialize <<<
 
-# Activate the conda environment
-export PATH="/data/leuven/344/vsc34493/miniconda/bin:$PATH" #Location of the python libraries you have installed using conda
-conda activate vsc_mwe
+conda activate vsc_mwe # Activate conda enviroment
 
 # Run the python script
 python example_script.py
