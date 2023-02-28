@@ -13,7 +13,7 @@
 # module load some_module
 
 # Copy data you need to scratch drive, bearing in mind that it will be deleted at some point.
-cp -r /lustre1/project/stg_00078/IMS $VSC_SCRATCH
+# cp -r /lustre1/project/stg_00078/IMS $VSC_SCRATCH
 
 # Tell conda where to find the python libraries you have installed conda in a conda environment and activate the environment
 # >>> conda initialize >>> # This is the conda intialisation that is added by default by conda.
