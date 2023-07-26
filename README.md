@@ -6,4 +6,4 @@ For slurm use
 sbatch jobscript.slurm
 ```
 
-to run the jobscrip
+to run the jobscript.
