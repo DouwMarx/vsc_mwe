@@ -10,7 +10,7 @@ Provided you have access, you can find the teams data here
 /lustre1/project/stg_00078
 ```
 
-# Setup mlflow dashboard to be viewed locally.
+# Setup mlflow dashboard to be viewed locally port forwarding
 
 When logged into cluster start the mlflow server on the default port 5000 by running the line below when you are in the directory contraining the "mlruns" folder:
 (Keep in mind that you might need to activate a conda environment with mlflow installed first)
@@ -19,11 +19,14 @@ mlflow ui
 ```
 
 Then on your local machine forward the port to your local machine:
+Make sure to kill all processes on the cluster: ```kill $(lsof -t -i:5000)```
 ```
 ssh -L 5000:localhost:5000 hpc
 ```
 
 Then you can view the mlflow dashboard at http://localhost:5000
+
+If someething does not work rather start from scratch and kill everything.
 
 # Extensions
 It can make sense to add appending the path of the current directory to the PYTHONPATH variable. This can be done by adding the following line to the top of the jobscript:
@@ -89,9 +92,14 @@ podman ps --all
 # Troubleshooting with HPC
 ## Run an interactive node to troubleshoot
 ```
-qsub -I -A lleuven_phm -l walltime=2:00:00
+qsub -I -A lleuven_phm -l walltime=4:00:00
 ```
   Optionally add  # -l walltime=2:00:00
+
+# Interactive session using slurm instead  
+```
+srun --nodes=1 --ntasks-per-node=1 --time=02:00:00 --cluster=genius --account=lleuven_phm --pty bash -i
+```
 
 ## Restore your bashrc to default
 ```
@@ -127,6 +135,23 @@ Then run the script in an interactive session
 ./some_jobscript_name.pbs
 ```
 
+## How to submit jobs where one of the jobs depends on the other
+
+For example, if you need to compress data after running many jobs.
+
+https://bioinformaticsworkbook.org/Appendix/HPC/SLURM/submitting-dependency-jobs-using-slurm.html#gsc.tab=0
+```
+sbatch --dependency=afterok:12345 myjob.pbs
+```
+
+```
+JOBID1=$(sbatch --parsable <other_options> <submission_script>)
+JOBID2=$(sbatch --dependency=afterok:$JOBID1 <other_options> <submission_script>)
+
+sbatch --dependency=afterok:$JOBID1,$JOBID2 <submission_script>
+```
+
+
 # Configuration file for connecting to the VSC
 
 ~/.ssh/config
@@ -154,5 +179,12 @@ scp hpc:/vsc-hard-mounts/leuven-data/344/vsc34493/projects/biased_anomaly_detect
 cp -r /data/leuven/344/vsc34493/data /scratch/leuven/344/vsc34493
 ```
 
+## Check what a job cost
+```
+sam-list-usagerecords --account=lp_my_project --start=2023-01-01 --end=2023-01-31
+```
+
+Possibly it could make sense to add dayly limites 
+https://slurm.schedmd.com/resource_limits.html
 
 

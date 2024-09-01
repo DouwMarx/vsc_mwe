@@ -17,3 +17,8 @@ ssh -fNL ${local_port}:localhost:${remote_port} hpc "conda activate biased_anoma
 
 
 echo "SSH port forwarding is set up. Access the MLflow UI at http://localhost:${local_port}."
+
+# Other options
+#  ssh -L localhost:8080:localhost:5000 hpc
+# And check here
+# https://docs.vscentrum.be/access/ssh_config.html#how-to-set-up-a-tunnel
