@@ -28,6 +28,36 @@ Then you can view the mlflow dashboard at http://localhost:5000
 
 If someething does not work rather start from scratch and kill everything.
 
+
+## Or if the cluster is not busy:
+### on cluster
+Mlruns in the scratch directory where the read/write should be faster You might actually have to be outside of the directory?
+#/scratch/leuven/344/vsc34493/mlruns $ mlflow server --backend-store-uri sqlite:///mlruns.db --default-artifact-root file:mlruns --host 0.0.0.0 --port 5050 --workers 18
+
+# or if it is not sqlite, but just files inside the project directory
+mlflow server --backend-store-uri file:///data/leuven/344/vsc34493/mlruns --default-artifact-root /data/leuven/344/vsc34493/mlruns --host
+
+### on local
+`ssh -fNL 5000:localhost:5050 hpc`
+Then look at http://localhost:5000
+
+Note that you might run into issues if you want to move the database and it allready exists somewhere else (Change the experiment name)
+
+### Copyting with rsync and viewing locally for mlruns
+One things that seems to be working quite well is run the mlflow server locally and to sync the data using rsync
+```
+rsync -av --ignore-existing -e ssh hpc:/data/leuven/344/vsc34493/projects/biased_anomaly_detection/mlruns ~/Downloads  
+```
+-a is for archive mode so that the same timestamps are kept
+--ignore-existing is to not unnecessarily copy files that are already there
+
+### Alternatively you can copy the data over using rsync
+
+[//]: # (rsync -avz -e ssh hpc:/data/leuven/344/vsc34493/projects/biased_anomaly_detection ~/Downloads)
+rsync -avz --progress -e ssh hpc:/data/leuven/344/vsc34493/projects/biased_anomaly_detection ~/Downloads
+
+
+
 # Extensions
 It can make sense to add appending the path of the current directory to the PYTHONPATH variable. This can be done by adding the following line to the top of the jobscript:
 This will allow the src folder to be imported as a module.
@@ -90,26 +120,22 @@ podman ps --all
 ```
 
 # Troubleshooting with HPC
-## Run an interactive node to troubleshoot
-```
-qsub -I -A lleuven_phm -l walltime=4:00:00
-```
-  Optionally add  # -l walltime=2:00:00
-
-# Interactive session using slurm instead  
+# Interactive session using slurm 
 ```
 srun --nodes=1 --ntasks-per-node=1 --time=02:00:00 --cluster=genius --account=lleuven_phm --pty bash -i
+```
+
+If you want to run a python scipt you might have to activate the conda environment and set the PYTHONPATH
+
+```
+conda activate biased_anomaly_detection
+export PYTHONPATH=$PYTHONPATH:.
 ```
 
 ## Restore your bashrc to default
 ```
 /bin/cp /etc/skel/.bashrc ~/ # This will overwrite your current bashrc
 ``` 
-
-
-# Questions 
- * How to make sure that you don't have to download the docker container every time you have a new session on a node?
-
 
  # Hacks and simplifications 
 
@@ -179,7 +205,7 @@ scp hpc:/vsc-hard-mounts/leuven-data/344/vsc34493/projects/biased_anomaly_detect
 cp -r /data/leuven/344/vsc34493/data /scratch/leuven/344/vsc34493
 ```
 
-## Check what a job cost
+# Check what a job cost
 ```
 sam-list-usagerecords --account=lp_my_project --start=2023-01-01 --end=2023-01-31
 ```
@@ -188,3 +214,15 @@ Possibly it could make sense to add dayly limites
 https://slurm.schedmd.com/resource_limits.html
 
 
+# Monitoring jobs
+Use ```squeue``` to see if the jobs are running/submitted
+```
+squeue
+```
+
+Then you can read off the node and ssh into it to see what is happening
+```
+ssh r26i13n12
+```
+
+Then you can use ```top```  or ```htop``` to see what is happening on the node
